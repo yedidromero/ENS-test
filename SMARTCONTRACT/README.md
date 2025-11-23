@@ -1,5 +1,23 @@
 # Animetlik – Smart Contracts (Monad + ENS Integration)
 
+##How are you using this Protocol / API?
+
+We use ENS to generate a unique subdomain for every author (e.g., handle.animetlik.eth).
+When a user registers in our platform, the ENS registrar contract deployed on Ethereum creates the subdomain and sets the corresponding records (addr, monad-address, channel-uri).
+Our main Monad smart contract stores this ENS identity using the function linkMyEns, allowing authors to have a portable, verifiable Web3 identity connected to their profile and content.
+
+#Code reference (line / file):
+For the ENS registrar (registerAuthorSubname):
+
+Line 95
+https://github.com/yedidromero/ENS-test/blob/main/SMARTCONTRACT/AuthorEnsRegistrar.sol#L95
+
+For the linking function in Stories (linkMyEns):
+
+Line 324
+https://github.com/yedidromero/ENS-test/blob/main/SMARTCONTRACT/smart.sol#L324
+
+
 This repository contains the smart contracts powering Animetlik, a Web3 storytelling platform with on-chain subscriptions, paid likes, staking rewards, and ENS-based author identity.
 
 ## 🚀 What Changed (Summary)
