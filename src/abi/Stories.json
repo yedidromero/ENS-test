@@ -1,0 +1,4 @@
+[
+  { "type":"function","stateMutability":"view","name":"plans","inputs":[{"name":"planId","type":"uint256"}],"outputs":[{"name":"name","type":"string"},{"name":"priceWei","type":"uint256"},{"name":"periodSecs","type":"uint32"},{"name":"active","type":"bool"}] },
+  { "type":"function","stateMutability":"payable","name":"subscribe","inputs":[{"name":"planId","type":"uint256"},{"name":"periods","type":"uint256"}],"outputs":[] }
+]
