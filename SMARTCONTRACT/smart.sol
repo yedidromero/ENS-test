@@ -186,6 +186,7 @@ interface IStakingVaultNative {
  * @title StoriesAndLikesNativeSplitStaking
  * @notice Perfiles, planes, publicaciones y likes (MON nativo).
  *         Split del like: 20% plataforma (treasury), 10% stakingVault, 70% autor.
+ * @dev Extendido con soporte para ENS: cada perfil puede almacenar su subdominio ENS.
  */
 contract StoriesAndLikesNativeSplitStaking is Ownable, Pausable, ReentrancyGuard {
     /* Config */
@@ -202,6 +203,10 @@ contract StoriesAndLikesNativeSplitStaking is Ownable, Pausable, ReentrancyGuard
         uint256 planId;       // 0 si ninguno
         uint64  planExpiresAt;
         bool    exists;
+
+        // === ENS ===
+        bytes32 ensNode;      // namehash del subdominio ENS (ej. namehash("sakura.monatoons.eth"))
+        string  ensName;      // "sakura.monatoons.eth"
     }
     mapping(address => Profile) public profiles;
 
@@ -247,6 +252,13 @@ contract StoriesAndLikesNativeSplitStaking is Ownable, Pausable, ReentrancyGuard
         uint256 authorWei,
         uint256 platformWei,
         uint256 stakingWei
+    );
+
+    // === ENS: nuevo evento ===
+    event ProfileEnsLinked(
+        address indexed user,
+        string ensName,
+        bytes32 ensNode
     );
 
     constructor(
@@ -302,6 +314,23 @@ contract StoriesAndLikesNativeSplitStaking is Ownable, Pausable, ReentrancyGuard
         p.planId = planId;
         p.planExpiresAt = expiresAt;
         emit Subscribed(user, planId, expiresAt, 0, 0);
+    }
+
+    /**
+     * @notice El usuario liga su ENS (subdominio) a su perfil de autor.
+     * @dev Asumimos que el subdominio ya fue creado en Ethereum por otro contrato.
+     *      Aquí sólo guardamos el namehash (ensNode) y el texto completo (ensName).
+     */
+    function linkMyEns(bytes32 _ensNode, string calldata _ensName) external whenNotPaused {
+        Profile storage p = profiles[msg.sender];
+        require(p.exists, "profile missing");
+        require(p.ensNode == bytes32(0), "ENS already linked");
+        require(bytes(_ensName).length > 0 && bytes(_ensName).length <= 200, "bad ensName");
+
+        p.ensNode = _ensNode;
+        p.ensName = _ensName;
+
+        emit ProfileEnsLinked(msg.sender, _ensName, _ensNode);
     }
 
     /* ===== Planes (precio en wei) ===== */
