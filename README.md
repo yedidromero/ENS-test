@@ -45,4 +45,4 @@ Creates: `handle.animetlik.eth`
 
 ## Repository
 Smart contracts and deployment info:  
-https://github.com/yedidromero/animetlik/tree/main/SMARTCONTRACT
+https://github.com/yedidromero/ENS-test/tree/main/SMARTCONTRACT
